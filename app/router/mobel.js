@@ -5,4 +5,9 @@ module.exports = app =>{
 
   router.post('/mb/add-car', controller.mb.shopcar.shopcar.addCar)//添加购物车
   router.post('/mb/remove-car', controller.mb.shopcar.shopcar.removeCar)//添加购物车
+
+  router.post('/mb/add-address', controller.mb.address.address.addAddress)//添加地址
+  router.post('/mb/edit-address', controller.mb.address.address.editAddress)//修改地址
+
+  
 }

@@ -3,11 +3,10 @@ module.exports = {
     for (const item of arr) {
       if (item.rule) {
         if (!item.rule(item.value)) {
-          return `${item.label}验证失败`;
+          return `${item.label}验证失败，${item.msg}`;
         }
       } else {
         if (!item.value) {
-          console.log(item.value);
           return `${item.label}参数丢失`;
         }
       }

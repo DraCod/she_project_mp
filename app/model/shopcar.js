@@ -21,6 +21,7 @@ module.exports = app =>{
       type: INTEGER,
       autoIncrement: true,
     },
+    price:STRING,
     goods:STRING,
     class_id:INTEGER,
     main_id:INTEGER,

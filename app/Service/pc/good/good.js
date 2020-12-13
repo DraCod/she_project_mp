@@ -122,6 +122,7 @@ class Good extends Service {
     }
     const create = await ctx.model.Goods.create({
       goods:body.goods,
+      price:body.price,
       class_id:body.class_id,
       main_id:body.main_id,
       path_id:body.path_id,
@@ -154,6 +155,7 @@ class Good extends Service {
     }
     await this.app.model.Goods.update({
       goods:body.goods,
+      price:body.price,
       class_id:body.class_id,
       main_id:body.main_id,
       path_id:body.path_id,

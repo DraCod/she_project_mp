@@ -110,6 +110,10 @@ class Good extends Controller{
         value:body.goods
       },
       {
+        label:'price',
+        value:body.price
+      },
+      {
         label: 'class_id',
         value:body.class_id
       },
