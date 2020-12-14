@@ -74,8 +74,7 @@ class LoginController extends Controller {
     //   status: -1,
     // };
     console.log(decoded, 'decoded');
-
-    const data = await this.ctx.service.mpLogin.Login(decoded);
+    const data = await this.ctx.service.login.mpLogin.Login(decoded);
     this.ctx.body = {
       status: 1,
       data,
