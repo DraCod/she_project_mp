@@ -53,7 +53,8 @@ class Order extends Service{
       body.goodList = JSON.stringify(body.goodList);
       const create=await this.ctx.model.Order.create({
         ...body,
-        status:1
+        status:1,
+        orderNum:new Date().getTime()%10000000000+parseInt(Math.random()*10)
       })
       return {
         status:200,

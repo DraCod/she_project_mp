@@ -23,4 +23,7 @@ module.exports = app =>{
   router.post('/pc/edit-good',controller.pc.good.good.editGood)//修改商品
   router.get('/pc/good-list', controller.pc.good.good.goodList)//商品列表
 
+
+  router.get('/pc/order-list',controller.pc.order.order.orderList)//订单列表
+
 }

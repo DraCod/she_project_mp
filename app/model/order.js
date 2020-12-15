@@ -10,6 +10,7 @@ module.exports = app =>{
     addressId:INTEGER,
     goodList:STRING,
     status:INTEGER,
+    orderNum:STRING,
     createdAt:DATE,
     updatedAt:DATE,
   })
