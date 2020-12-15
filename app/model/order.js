@@ -37,6 +37,25 @@ module.exports = app =>{
     updatedAt:DATE
   })
 
+  const User = app.model.define('users', {
+    id: {
+      primaryKey: true,
+      type: INTEGER,
+      autoIncrement: true,
+    },
+    userName:STRING,
+    avatarUrl:STRING,
+    openId: STRING,
+    createdAt: DATE,
+    updatedAt: DATE,
+  });
+
+  Order.belongsTo(User,{
+    foreignKey:'userId',
+    targetKey:'id',
+    as:'user'
+  })
+
   Order.belongsTo(Address,{
     foreignKey:'addressId',
     targetKey:'id',
