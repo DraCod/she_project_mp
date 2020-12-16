@@ -1,7 +1,7 @@
 module.exports = app =>{
   const { router, controller } = app;
-  // const jwt = app.middleware.jwt(app.config.jwt);
-  router.post('/mb/login', controller.login.mpLogin.login);//微信登录
+  const jwt = app.middleware.jwt(app.config.jwt);
+  router.post('/mb/login',jwt, controller.login.mpLogin.login);//微信登录
 
 
   router.post('/mb/add-car', controller.mb.shopcar.shopcar.addCar)//添加购物车

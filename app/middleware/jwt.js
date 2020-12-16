@@ -30,6 +30,7 @@ module.exports = options => {
 			} catch (error) {
 				ctx.status = 401;
 				ctx.body = {
+					status :401,
 					message: error.message,
 				};
 				return;
@@ -37,6 +38,7 @@ module.exports = options => {
 		} else {
 			ctx.status = 401;
 			ctx.body = {
+				status:401,
 				message: '没有token',
 			};
 			return;

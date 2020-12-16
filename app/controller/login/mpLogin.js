@@ -58,6 +58,7 @@ class LoginController extends Controller {
     encryptedData = Buffer.from(encryptedData, 'base64');
     iv = Buffer.from(iv, 'base64');
     let decoded;
+    console.log('getUser');
     try {
       const decipher = crypto.createDecipheriv('aes-128-cbc', session_key, iv);
       decipher.setAutoPadding(true);
