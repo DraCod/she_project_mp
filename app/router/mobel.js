@@ -28,5 +28,7 @@ module.exports = app =>{
 
   router.get('/mb/collection-list',jwt,controller.mb.collection.collection.collectionList)//收藏列表
   router.post('/mb/add-collection',jwt,controller.mb.collection.collection.addCollection)//添加收藏
-  router.post('/mb/remove-collection',jwt,controller.mb.collection.collection.removeCollection)//取消收藏
+  router.post('/mb/remove-collection',controller.mb.collection.collection.removeCollection,jwt)//取消收藏
+
+  router.get('/mb/search-list',controller.mb.good.good.searchList)//搜索列表
 }
