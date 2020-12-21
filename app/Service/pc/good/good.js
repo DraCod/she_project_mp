@@ -173,8 +173,13 @@ class Good extends Service {
   }
 
 
-  async goodList(){
+  async goodList(query){
+    let where={};
+    if(query.classify){
+      where.classId=query.classify
+    }
     const find = await this.app.model.Goods.findAll({
+      where,
       include:[
         {
           model:this.app.model.Classify,
@@ -207,6 +212,38 @@ class Good extends Service {
       status:200,
       data:find
     }
+  }
+
+  async goodDetail({id,userid}){
+    let good = await this.ctx.model.Goods.findOne({
+      where:{
+        id
+      },
+      include:[
+        {
+          model:this.app.model.Img,
+          as:'main',
+          attributes:['id','path']
+        }
+      ]
+    })
+    good = good.dataValues
+    good.path = await this.findImg(good.pathId)
+    good.detail = await this.findImg(good.detailId)
+    good.path = good.path[0];
+    good.detail = good.detail[0];
+    let find = await this.ctx.model.Collection.findOne({
+      where:{
+        goodId:id,
+        userId:userid
+      }
+    })
+    if(find){
+      good.collection = true
+    }else{
+      good.collection = false
+    }
+    return good
   }
 
 }

@@ -23,6 +23,14 @@ class Address extends Service{
     if(body.default==1){
      await this.updateDefault(body)
     }
+    const find = await this.ctx.model.Address.findOne({
+      where:{
+        userId:body.userId
+      }
+    })
+    if(!find){
+      body.default = 1;
+    }
     await this.ctx.model.Address.create({
       ...body
     })
@@ -68,6 +76,70 @@ class Address extends Service{
     return {
       status:200,
       msg:'修改成功'
+    }
+  }
+
+  async addressList({ userId }){
+    return {
+      status:200,
+      data:await this.ctx.model.Address.findAll({
+        where:{
+          userId
+        }
+      })
+    }
+  }
+
+  async addressDetail({userId,id}){
+    return {
+      status:200,
+      data:await this.ctx.model.Address.findOne({
+        where:{
+          id,
+          userId
+        }
+      })
+    }
+  }
+
+  async removeAddress({ id , userId }){
+    let destroy = await this.ctx.model.Address.destroy({
+      where:{
+        id,
+        userId
+      }
+    })
+    let find = await this.ctx.model.Address.findOne({
+      where:{
+        default:1
+      }
+    })
+    if(!find){
+      let one=await this.ctx.model.Address.findOne({
+        where:{
+          userId
+        }
+      })
+      if(one){
+        await this.ctx.model.Address.update({
+          default:1
+        },{
+          where:{
+            id:one.dataValues.id
+          }
+        })
+      }
+    }
+    if(destroy){
+      return {
+        status:200,
+        msg:'删除成功'
+      }
+    }else{
+      return {
+        status:402,
+        msg:'操作失败'
+      }
     }
   }
 }

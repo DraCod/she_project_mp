@@ -172,7 +172,7 @@ class Good extends Controller{
   }
 
   async goodList(){
-    this.ctx.body= await this.ctx.service.pc.good.good.goodList();
+    this.ctx.body= await this.ctx.service.pc.good.good.goodList(this.ctx.query);
   }
 
   /**
@@ -182,6 +182,19 @@ class Good extends Controller{
   async getImg(){
     const {ctx} = this;
     ctx.body = await ctx.service.pc.good.good.getImg(ctx.query);
+  }
+
+  async goodDetail(){
+    const {ctx} = this;
+    if(!ctx.query.id){
+      ctx.body={
+        status:402,
+        msg:'商品id不能为空'
+      }
+    }
+    const {id} = this.app.getUserId(ctx);
+    ctx.query.userid = id;
+    ctx.body = await this.service.pc.good.good.goodDetail(ctx.query)
   }
 }
 

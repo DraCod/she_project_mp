@@ -4,15 +4,6 @@ class Order extends Controller{
   async previewOrder(){
     const {ctx} = this;
     const {body} = ctx.request;
-    try{
-      body.goodList = JSON.parse(body.goodList)
-    }catch (e){
-      return{
-        status:402,
-        msg:e
-      }
-    }
-    console.log(body);
     const verify = this.app.verify([
       {
         label:'goodList',
@@ -36,10 +27,9 @@ class Order extends Controller{
       }
       return
     }
-    // const {id} = this.app.getUserId(ctx);
-    const id = 1;
+    const {id} = this.app.getUserId(ctx);
+    // const id = 1;
     body.userId = id;
-    console.log(body)
     ctx.body = await ctx.service.mb.order.order.previewOrder(body);
   }
 
@@ -47,14 +37,14 @@ class Order extends Controller{
   async createOrder(){
     const {ctx} = this;
     const {body} = ctx.request;
-    try{
-      body.goodList = JSON.parse(body.goodList)
-    }catch (e){
-      return{
-        status:402,
-        msg:e
-      }
-    }
+    // try{
+    //   body.goodList = JSON.parse(body.goodList)
+    // }catch (e){
+    //   return{
+    //     status:402,
+    //     msg:e
+    //   }
+    // }
     const verify = this.app.verify([
       {
         label:'goodList',
@@ -94,8 +84,8 @@ class Order extends Controller{
       }
       return
     }
-    // const {id} = this.app.getUserId(ctx);
-    const id = 1;
+    const {id} = this.app.getUserId(ctx);
+    // const id = 1;
     body.userId = id;
     ctx.body = await ctx.service.mb.order.order.createOrder(body);
   }
@@ -121,17 +111,35 @@ class Order extends Controller{
       return
     }
     // const {id} = this.app.getUserId(ctx);
-    const id = 1;
-    body.userId = id;
+    // // const id = 1;
+    // body.userId = id;
     ctx.body = await ctx.service.mb.order.order.editOrder(body);
   }
 
   async orderDetail(){
     const query=this.ctx.query;
-    // const {id} = this.app.getUserId(ctx);
-    const id = 1;
+    const {id} = this.app.getUserId(this.ctx);
+    // const id = 1;
     query.userId = id;
     this.ctx.body =  await this.ctx.service.mb.order.order.orderDetail(query);
+  }
+
+
+
+  async orderStatus(){
+    const query=this.ctx.query;
+    const {id} = this.app.getUserId(this.ctx);
+    query.userId = id;
+    this.ctx.body = await this.ctx.service.mb.order.order.orderStatus(query);
+  }
+
+
+  async orderList(){
+    const {ctx} = this;
+    const {query} = ctx;
+    const {id} = this.app.getUserId(this.ctx);
+    query.userId = id;
+    ctx.body = await ctx.service.mb.order.order.orderList(query);
   }
 }
 module.exports = Order

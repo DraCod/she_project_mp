@@ -11,8 +11,8 @@ class Address extends Controller{
       }
       return false
     }
-    // const {id} = this.app.getUserId(ctx);
-    const id = 1;
+    const {id} = this.app.getUserId(ctx);
+    // const id = 1;
     body.allAddress = body.provincial+body.market+body.regional+body.address;
     body.userId = id;
     return body;
@@ -112,6 +112,44 @@ class Address extends Controller{
     if(body){
       this.ctx.body = await this.ctx.service.mb.address.address.editAddress(body);
     }
+  }
+
+  async addressList(){
+    const  {ctx} = this;
+    const  {query}  = ctx;
+    const {id} = this.app.getUserId(ctx);
+    query.userId = id;
+    ctx.body = await this.ctx.service.mb.address.address.addressList(query);
+  }
+
+  async addressDetail(){
+    const {ctx} = this;
+    const {query} = ctx;
+    const {id} = this.app.getUserId(ctx);
+    query.userId = id;
+    if(!query.id){
+      ctx.body = {
+        status: 402,
+        msg:'缺少id'
+      }
+      return;
+    }
+    ctx.body = await ctx.service.mb.address.address.addressDetail(query);
+  }
+
+  async removeAddress(){
+    const {ctx} = this;
+    const {body} = ctx.request;
+    const {id} = this.app.getUserId(ctx);
+    body.userId = id;
+    if(!body.id){
+      ctx.body = {
+        status: 402,
+        msg:'缺少id'
+      }
+      return;
+    }
+    ctx.body = await ctx.service.mb.address.address.removeAddress(body);
   }
 }
 

@@ -3,14 +3,29 @@ const Service = require('egg').Service
 
 class Order extends Service{
   async previewOrder(body){
-    const findAddress = await this.ctx.model.Address.findOne({
-      where:{
-        default:1,
-        userId:body.userId
+    let findAddress=null
+    if(body.addressId){
+      findAddress = await this.ctx.model.Address.findOne({
+        where:{
+          id:body.addressId
+        }
+      })
+    }else{
+      findAddress = await this.ctx.model.Address.findOne({
+        where:{
+          default:1,
+          userId:body.userId
+        }
+      })
+      if(!findAddress){
+        return {
+          status:402,
+          msg:'先添加地址'
+        }
       }
-    })
+    }
     const goodList = await this.app.model.query(`
-      SELECT * FROM goods where id = ${body.goodList.map(row=>row.id).join(' or id =')}
+      SELECT goods.id,goods.goods,goods.price,imgs.path FROM goods LEFT JOIN imgs ON goods.main_id = imgs.id  where goods.id = ${body.goodList.map(row=>row.id).join(' or id =')}
     `)
     let price = 0;
     goodList[0].forEach(row=>{
@@ -21,7 +36,9 @@ class Order extends Service{
     return {
       status:200,
       goodList:goodList[0],
-      price,
+      info:{
+        price,
+      },
       address:findAddress||null
     }
   }
@@ -65,7 +82,7 @@ class Order extends Service{
   async editOrder(body){
     const order = await this.ctx.model.Order.findOne({
       where:{
-        userId:body.userId,
+        // userId:body.userId,
         id:body.id,
       }
     })
@@ -85,7 +102,7 @@ class Order extends Service{
       status:body.status
     },{
       where:{
-        userId:body.userId,
+        // userId:body.userId,
         id:body.id,
       }
     })
@@ -137,6 +154,58 @@ class Order extends Service{
     return {
       status:200,
       data: { ...find,account }
+    }
+  }
+
+  async orderStatus(query){
+    let obj = await Promise.all([
+      this.app.model.query(`SELECT COUNT(*) as count FROM orders where status = 1 and user_id = ${query.userId}`),
+      this.app.model.query(`SELECT COUNT(*) as count FROM orders where status = 2 and user_id = ${query.userId}`),
+      this.app.model.query(`SELECT COUNT(*) as count FROM orders where status = 3 and user_id = ${query.userId}`),
+      this.app.model.query(`SELECT COUNT(*) as count FROM orders where status = 4 and user_id = ${query.userId}`),
+    ]).then(res=>{
+     return {
+       await_pay:res[0][0][0].count,
+       await_transport:res[1][0][0].count,
+       await_take:res[2][0][0].count,
+       await_evaluation:res[3][0][0].count
+     }
+    })
+    return {
+      status:200,
+      data:obj
+    }
+  }
+
+
+  async orderList(query){
+    let where={
+      userId:query.userId
+    }
+    if(query.status){
+      where.status=query.status
+    }
+    let list = await this.ctx.model.Order.findAll({
+      where
+    })
+    for (let item of list){
+      item.goodList = JSON.parse(item.goodList);
+      let arr=await this.app.model.query(`
+        SELECT goods.id,goods.goods,goods.price,imgs.path FROM goods LEFT JOIN imgs ON goods.main_id = imgs.id WHERE goods.id = ${item.goodList.map(row=>row.id).join(' or ')}
+      `)
+      arr = arr[0];
+      let price=0;
+      arr.forEach(el=>{
+        let find = item.goodList.find(ro=>ro.id==el.id);
+        el.num = find.num;
+        price+=(Number(el.num)*Number(el.price));
+      })
+      item.dataValues.price = price;
+      item.goodList = arr;
+    }
+    return{
+      status:200,
+      data:list
     }
   }
 }
