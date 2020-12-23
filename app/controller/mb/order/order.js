@@ -141,5 +141,30 @@ class Order extends Controller{
     query.userId = id;
     ctx.body = await ctx.service.mb.order.order.orderList(query);
   }
+
+  async orderPay(){
+    const {ctx} = this;
+    const {body} = ctx.request;
+    const {id} = this.app.getUserId(this.ctx);
+    body.userId = id;
+    const verify = this.app.verify([
+      {
+        label:'id',
+        value:body.id
+      },
+      {
+        label: 'type',
+        value:body.type,
+      }
+    ])
+    if(verify){
+      ctx.body = {
+        status:402,
+        msg:verify
+      }
+      return
+    }
+    ctx.body = await ctx.service.mb.order.order.orderPay(body);
+  }
 }
 module.exports = Order

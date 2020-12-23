@@ -30,4 +30,5 @@ module.exports = app =>{
 
   router.get('/pc/good-detail',jwt,controller.pc.good.good.goodDetail)//商品详情
 
+  router.post('/pc/give-wallet',controller.pc.user.user.giveWallet)//赠送金额
 }

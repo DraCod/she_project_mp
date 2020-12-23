@@ -58,7 +58,6 @@ class LoginController extends Controller {
     encryptedData = Buffer.from(encryptedData, 'base64');
     iv = Buffer.from(iv, 'base64');
     let decoded;
-    console.log('getUser');
     try {
       const decipher = crypto.createDecipheriv('aes-128-cbc', session_key, iv);
       decipher.setAutoPadding(true);
@@ -148,6 +147,12 @@ class LoginController extends Controller {
       msg: '请重新再试',
       status: -1,
     };
+  }
+
+  async userInfo(){
+    const {ctx} = this;
+    const {id} = this.app.getUserId(ctx);
+    ctx.body = await ctx.service.login.mpLogin.userInfo(id);
   }
 }
 

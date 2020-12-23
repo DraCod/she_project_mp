@@ -20,6 +20,18 @@ class LoginSrvice extends Service {
       ...decoded,
     };
   }
+
+  async userInfo(id){
+    const find = await this.ctx.model.User.findOne({
+      where: {
+        id
+      }
+    });
+    return {
+      status:200,
+      ...find.dataValues,
+    };
+  }
 }
 
 module.exports = LoginSrvice;

@@ -24,7 +24,7 @@ class AdministratorLoginService extends Service {
           id: find.id,
           name: find.name,
         }, this.app.config.jwt.secret, {
-          expiresIn: '60s',
+          expiresIn: '6000000s',
         }),
       };
     } else {

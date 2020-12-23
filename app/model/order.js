@@ -11,6 +11,7 @@ module.exports = app =>{
     goodList:STRING,
     status:INTEGER,
     orderNum:STRING,
+    remarks:STRING,
     createdAt:DATE,
     updatedAt:DATE,
   })

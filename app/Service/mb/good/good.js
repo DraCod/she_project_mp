@@ -14,6 +14,12 @@ class Good extends Service{
       order:[
         [query.order||'id',query.way||'ASC']
       ],
+      include:[
+        {
+          model:this.ctx.model.Img,
+          as:'main'
+        }
+      ]
     })
     return {
       status:200,

@@ -2,6 +2,7 @@ module.exports = app =>{
   const { router, controller } = app;
   const jwt = app.middleware.jwt(app.config.jwt);
   router.post('/mb/login', controller.login.mpLogin.login);//微信登录
+  router.get('/mb/get-user-info',jwt,controller.login.mpLogin.userInfo)//用户信息
 
 
   router.post('/mb/add-car', controller.mb.shopcar.shopcar.addCar)//添加购物车
@@ -20,6 +21,8 @@ module.exports = app =>{
   router.get('/mb/order-detail',jwt, controller.mb.order.order.orderDetail)//订单订单详情
   router.post('/mb/create-order',jwt, controller.mb.order.order.createOrder)//创建订单
   router.post('/mb/edit-order', controller.mb.order.order.editOrder)//修改订单状态
+  router.post('/mb/order-pay',jwt,controller.mb.order.order.orderPay)//订单支付
+
 
 
   router.get('/mb/order-status',jwt,controller.mb.order.order.orderStatus)//个人订单状态
@@ -30,5 +33,13 @@ module.exports = app =>{
   router.post('/mb/add-collection',jwt,controller.mb.collection.collection.addCollection)//添加收藏
   router.post('/mb/remove-collection',controller.mb.collection.collection.removeCollection,jwt)//取消收藏
 
+
   router.get('/mb/search-list',controller.mb.good.good.searchList)//搜索列表
+
+
+  router.get('/mb/preview-comment',jwt,controller.mb.comment.comment.previewComment)//预览评论页面
+  router.post('/mb/set-comment',jwt,controller.mb.comment.comment.setComment)//提交评论
+  router.get('/mb/comment-list',jwt,controller.mb.comment.comment.commentList)//评论列表
+
+
 }

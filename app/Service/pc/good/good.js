@@ -227,7 +227,7 @@ class Good extends Service {
         }
       ]
     })
-    good = good.dataValues
+    good = good.dataValues;
     good.path = await this.findImg(good.pathId)
     good.detail = await this.findImg(good.detailId)
     good.path = good.path[0];
@@ -237,12 +237,24 @@ class Good extends Service {
         goodId:id,
         userId:userid
       }
-    })
+    });
     if(find){
       good.collection = true
     }else{
       good.collection = false
     }
+    let comment = await this.ctx.model.Comment.findOne({
+      where:{
+        goodId:id
+      },
+      include:[
+        {
+          model:this.ctx.model.User,
+          as:'user'
+        }
+      ]
+    })
+    good.comment = comment;
     return good
   }
 

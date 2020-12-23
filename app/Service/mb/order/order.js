@@ -3,12 +3,14 @@ const Service = require('egg').Service
 
 class Order extends Service{
   async previewOrder(body){
-    let findAddress=null
+    let findAddress=null;
+    let where={};
+    if(body.addressId){
+      where.id=body.addressId
+    }
     if(body.addressId){
       findAddress = await this.ctx.model.Address.findOne({
-        where:{
-          id:body.addressId
-        }
+        where
       })
     }else{
       findAddress = await this.ctx.model.Address.findOne({
@@ -25,8 +27,10 @@ class Order extends Service{
       }
     }
     const goodList = await this.app.model.query(`
-      SELECT goods.id,goods.goods,goods.price,imgs.path FROM goods LEFT JOIN imgs ON goods.main_id = imgs.id  where goods.id = ${body.goodList.map(row=>row.id).join(' or id =')}
+      SELECT goods.id,goods.goods,goods.price,imgs.path FROM goods LEFT JOIN imgs ON goods.main_id = imgs.id  where goods.id = ${body.goodList.map(row=>row.id).join(' or goods.id = ')}
     `)
+    console.log(1);
+
     let price = 0;
     goodList[0].forEach(row=>{
       let find = body.goodList.find(ro=>ro.id==row.id)
@@ -186,7 +190,10 @@ class Order extends Service{
       where.status=query.status
     }
     let list = await this.ctx.model.Order.findAll({
-      where
+      where,
+      order:[
+        ['created_at','desc']
+      ]
     })
     for (let item of list){
       item.goodList = JSON.parse(item.goodList);
@@ -206,6 +213,94 @@ class Order extends Service{
     return{
       status:200,
       data:list
+    }
+  }
+
+  async orderPay({ userId,id,type }){
+    let user = await this.ctx.model.User.findOne({
+      where:{
+        id:userId
+      }
+    })
+    user=user.dataValues
+    const order = await this.ctx.model.Order.findOne({
+      where:{
+        id:id
+      }
+    })
+    const goodList = JSON.parse(order.dataValues.goodList);
+    const good = await this.app.model.query(`
+        SELECT id, price FROM goods WHERE id = ${goodList.map(row=>row.id).join(' or ')}
+    `)
+    let price=0;
+    good[0].forEach(el=>{
+      let find = goodList.find(ro=>ro.id==el.id);
+      el.num = find.num;
+      price +=(Number(el.price)*find.num);
+    })
+    if(user.giveWallet+user.rechargeWallet<price){
+      return{
+        status:402,
+        msg:'余额不足'
+      }
+    }
+    if(user[type]<price){
+      let cha = price - user[type];
+      let other = type==='giveWallet'?'rechargeWallet':'giveWallet'
+      await this.ctx.model.User.update({
+        [type]:0,
+        [other]:user[other]-cha
+      },{
+        where:{
+          id:userId
+        }
+      })
+      await this.ctx.model.Order.update({
+        status:2
+      },{
+        where:{
+          id:id
+        }
+      })
+      const arr=[
+        {
+          content:`支付订单${order.dataValues.orderNum}使用${type==='giveWallet'?'赠送金额':'充值金额'}¥${price-cha}`,
+          userId
+        },
+        {
+          content:`支付订单${order.dataValues.orderNum}使用${type!=='giveWallet'?'赠送金额':'充值金额'}¥${cha}`,
+          userId
+        }
+      ]
+      await this.ctx.model.Wallet.bulkCreate(arr);
+      return {
+        status:200,
+        msg:`${other==='rechargeWallet'?'充值':'赠送'}余额不足，已用其他余额填充`
+      }
+    }else{
+      console.log(type,user[type],user);
+      await this.ctx.model.User.update({
+        [type]:user[type]-price
+      },{
+        where:{
+          id:userId
+        }
+      })
+      await this.ctx.model.Order.update({
+        status:2
+      },{
+        where:{
+          id:id
+        }
+      })
+      await this.ctx.model.Wallet.create({
+        content:`支付订单${order.dataValues.orderNum}使用${type=='giveWallet'?'赠送金额':'充值金额'}¥${price}`,
+        userId
+      });
+      return {
+        status:200,
+        msg:'支付成功'
+      }
     }
   }
 }
