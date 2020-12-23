@@ -11,7 +11,8 @@ class LoginSrvice extends Service {
       defaults: {
         userName: decoded.nickName,
         openId: decoded.openId,
-        avatarUrl:decoded.avatarUrl
+        avatarUrl:decoded.avatarUrl,
+        giveWallet:998
       },
     });
     return {
