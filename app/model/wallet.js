@@ -1,5 +1,5 @@
 module.exports = app => {
-  const { STRING, INTEGER, DATE  } = app.Sequelize;
+  const { STRING, INTEGER, DATE,FLOAT  } = app.Sequelize;
   const Wallet = app.model.define('wallet', {
     id: {
       primaryKey: true,
@@ -8,6 +8,8 @@ module.exports = app => {
     },
     userId:INTEGER,
     content:STRING,
+    type:INTEGER,
+    num:FLOAT,
     createdAt: DATE,
     updatedAt: DATE,
   });

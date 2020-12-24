@@ -3,6 +3,7 @@ module.exports = app =>{
   const jwt = app.middleware.jwt(app.config.jwt);
   router.post('/mb/login', controller.login.mpLogin.login);//微信登录
   router.get('/mb/get-user-info',jwt,controller.login.mpLogin.userInfo)//用户信息
+  router.get('/mb/get-wallet',jwt,controller.login.mpLogin.getWallet)//获取用户钱包
 
 
   router.post('/mb/add-car', controller.mb.shopcar.shopcar.addCar)//添加购物车
@@ -41,5 +42,5 @@ module.exports = app =>{
   router.post('/mb/set-comment',jwt,controller.mb.comment.comment.setComment)//提交评论
   router.get('/mb/comment-list',jwt,controller.mb.comment.comment.commentList)//评论列表
 
-
+  router.get('/mb/wallet-list',jwt,controller.mb.wallet.wallet.walletList)
 }

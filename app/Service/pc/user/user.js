@@ -30,6 +30,12 @@ class User extends Service{
         id:Number(body.userId)
       }
     })
+    await this.ctx.model.Wallet.create({
+      content:`充值金额¥${body.giveWallet}`,
+      num:body.giveWallet,
+      type:1,
+      userId:body.userId
+    })
     return {
       status:200,
       msg:'赠送成功'

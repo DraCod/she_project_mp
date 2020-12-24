@@ -7,7 +7,6 @@ module.exports = app =>{
   router.get('/pc/user-list',controller.pc.user.user.userList)//用户列表
 
 
-
   router.post('/pc/add-classify', controller.pc.good.good.addClassify)//添加分类
   router.get('/pc/classify-list', controller.pc.good.good.classList)//查询所有分类
   router.post('/pc/edit-classify', controller.pc.good.good.editClassify)//修改分类名称
@@ -29,6 +28,5 @@ module.exports = app =>{
 
 
   router.get('/pc/good-detail',jwt,controller.pc.good.good.goodDetail)//商品详情
-
   router.post('/pc/give-wallet',controller.pc.user.user.giveWallet)//赠送金额
 }

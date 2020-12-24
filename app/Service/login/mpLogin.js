@@ -33,6 +33,18 @@ class LoginSrvice extends Service {
       ...find.dataValues,
     };
   }
+
+  async getWallet(id){
+    return {
+      status:200,
+      data:await this.ctx.model.User.findOne({
+        where:{
+          id,
+        },
+        attributes:['giveWallet','rechargeWallet']
+      })
+    }
+  }
 }
 
 module.exports = LoginSrvice;

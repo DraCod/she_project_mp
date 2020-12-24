@@ -265,11 +265,15 @@ class Order extends Service{
       const arr=[
         {
           content:`支付订单${order.dataValues.orderNum}使用${type==='giveWallet'?'赠送金额':'充值金额'}¥${price-cha}`,
-          userId
+          userId,
+          type:2,
+          num:price-cha
         },
         {
           content:`支付订单${order.dataValues.orderNum}使用${type!=='giveWallet'?'赠送金额':'充值金额'}¥${cha}`,
-          userId
+          userId,
+          type:2,
+          num:cha
         }
       ]
       await this.ctx.model.Wallet.bulkCreate(arr);
@@ -295,7 +299,9 @@ class Order extends Service{
       })
       await this.ctx.model.Wallet.create({
         content:`支付订单${order.dataValues.orderNum}使用${type=='giveWallet'?'赠送金额':'充值金额'}¥${price}`,
-        userId
+        userId,
+        type:2,
+        num:price
       });
       return {
         status:200,

@@ -154,6 +154,11 @@ class LoginController extends Controller {
     const {id} = this.app.getUserId(ctx);
     ctx.body = await ctx.service.login.mpLogin.userInfo(id);
   }
+
+  async getWallet(){
+    const {id} = this.app.getUserId(this.ctx);
+    this.ctx.body = await this.ctx.service.login.mpLogin.getWallet(id);
+  }
 }
 
 module.exports = LoginController;
