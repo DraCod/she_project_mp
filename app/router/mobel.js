@@ -42,5 +42,7 @@ module.exports = app =>{
   router.post('/mb/set-comment',jwt,controller.mb.comment.comment.setComment)//提交评论
   router.get('/mb/comment-list',jwt,controller.mb.comment.comment.commentList)//评论列表
 
-  router.get('/mb/wallet-list',jwt,controller.mb.wallet.wallet.walletList)
+  router.get('/mb/wallet-list',jwt,controller.mb.wallet.wallet.walletList)//钱包消费记录
+
+  router.get('/mb/recommend-list',controller.mb.good.good.recommendList)//推荐列表
 }

@@ -26,6 +26,23 @@ class Good extends Service{
       data:list
     }
   }
+
+  async recommendList(){
+    return {
+      status:200,
+      data:await this.ctx.model.Goods.findAll({
+        where:{
+          recommend:1
+        },
+        include:[
+          {
+            model:this.ctx.model.Img,
+            as:'main'
+          }
+        ]
+      })
+    }
+  }
 }
 
 module.exports = Good

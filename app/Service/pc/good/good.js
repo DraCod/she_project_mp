@@ -161,6 +161,7 @@ class Good extends Service {
       path_id:body.path_id,
       detail_id:body.detail_id,
       total:body.total,
+      recommend:body.recommend?1:0
     },{
       where:{
         id:body.id

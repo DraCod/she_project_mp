@@ -9,6 +9,11 @@ class Good extends Controller{
     //
     ctx.body = await ctx.service.mb.good.good.searchList(query);
   }
+
+  async recommendList(){
+    const {ctx} = this;
+    ctx.body = await ctx.service.mb.good.good.recommendList();
+  }
 }
 
 module.exports = Good

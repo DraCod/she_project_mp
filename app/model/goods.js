@@ -9,6 +9,7 @@ module.exports = app=>{
       autoIncrement: true,
     },
     goods:STRING,
+    recommend:INTEGER,
     price:STRING,
     classId:INTEGER,
     mainId:INTEGER,
