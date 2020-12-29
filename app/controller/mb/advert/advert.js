@@ -22,7 +22,7 @@ class Advert extends Controller{
       }
       return
     }
-    ctx.body = await ctx.service.advert.advert.addAdvert(body);
+    ctx.body = await ctx.service.mb.advert.advert.addAdvert(body);
   }
 
 
@@ -30,6 +30,19 @@ class Advert extends Controller{
     const {ctx} = this;
     const {query} = ctx;
     ctx.body = await ctx.service.mb.advert.advert.advertList(query);
+  }
+
+  async removeAdvert(){
+    const {ctx} = this;
+    const {body} = ctx.request;
+    if(!body.id){
+      ctx.body = {
+        status: 402,
+        msg:'缺少广告id'
+      }
+      return
+    }
+    ctx.body = await this.ctx.service.mb.advert.advert.removeAdvert(body);
   }
 }
 

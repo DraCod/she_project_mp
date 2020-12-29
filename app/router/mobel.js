@@ -45,4 +45,9 @@ module.exports = app =>{
   router.get('/mb/wallet-list',jwt,controller.mb.wallet.wallet.walletList)//钱包消费记录
 
   router.get('/mb/recommend-list',controller.mb.good.good.recommendList)//推荐列表
+
+
+
+  router.post('/mb/edit-name',jwt,controller.mb.setting.setting.editName)//修改杂货店名字
+  router.post('/mb/add-feedback',jwt,controller.mb.setting.setting.addFeedback)//添加反馈
 }
