@@ -3,6 +3,17 @@ const Service = require('egg').Service
 
 class Order extends Service{
   async previewOrder(body){
+    const user = await this.ctx.model.User.findOne({
+      where:{
+        id:body.userId
+      }
+    })
+    if(!user.dataValues.password){
+      return {
+        status:402,
+        msg:'请先设置支付密码'
+      }
+    }
     let findAddress=null;
     let where={};
     if(body.addressId){
@@ -216,13 +227,19 @@ class Order extends Service{
     }
   }
 
-  async orderPay({ userId,id,type }){
+  async orderPay({ userId,id,type,password }){
     let user = await this.ctx.model.User.findOne({
       where:{
         id:userId
       }
     })
     user=user.dataValues
+    if(user.password!=password){
+      return {
+        status:402,
+        msg:'密码错误'
+      }
+    }
     const order = await this.ctx.model.Order.findOne({
       where:{
         id:id

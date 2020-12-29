@@ -21,6 +21,14 @@ class Setting extends Controller{
   async feedbackList(){
     this.ctx.body = await this.ctx.service.mb.setting.setting.feedbackList();
   }
+
+  async editPassword(){
+    const {ctx} = this;
+    const {body} = ctx.request;
+    const {id} = this.app.getUserId(ctx);
+    body.id = id;
+    ctx.body = await ctx.service.mb.setting.setting.editPassword(body);
+  }
 }
 
 module.exports = Setting

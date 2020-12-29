@@ -40,6 +40,20 @@ class Setting extends Service{
       })
     }
   }
+
+  async editPassword(body){
+    await this.ctx.model.User.update({
+      password:body.password
+    },{
+      where:{
+        id:body.id
+      }
+    })
+    return {
+      status:200,
+      msg:'修改成功'
+    }
+  }
 }
 
 module.exports = Setting

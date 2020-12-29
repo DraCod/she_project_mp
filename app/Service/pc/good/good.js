@@ -156,10 +156,10 @@ class Good extends Service {
     await this.app.model.Goods.update({
       goods:body.goods,
       price:body.price,
-      class_id:body.class_id,
-      main_id:body.main_id,
-      path_id:body.path_id,
-      detail_id:body.detail_id,
+      classId:body.class_id,
+      mainId:body.main_id,
+      pathId:body.path_id,
+      detailId:body.detail_id,
       total:body.total,
       recommend:body.recommend?1:0
     },{

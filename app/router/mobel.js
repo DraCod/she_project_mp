@@ -50,4 +50,5 @@ module.exports = app =>{
 
   router.post('/mb/edit-name',jwt,controller.mb.setting.setting.editName)//修改杂货店名字
   router.post('/mb/add-feedback',jwt,controller.mb.setting.setting.addFeedback)//添加反馈
+  router.post('/mb/edit-password',jwt,controller.mb.setting.setting.editPassword)//修改支付密码
 }
