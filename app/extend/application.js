@@ -13,6 +13,6 @@ module.exports = {
     }
   },
   getUserId(ctx) {
-    return  ctx.app.jwt.verify(ctx.header.authorization,this.config.jwt.secret)
-  }
-}
+    return ctx.app.jwt.verify(ctx.header.authorization, this.config.jwt.secret);
+  },
+};

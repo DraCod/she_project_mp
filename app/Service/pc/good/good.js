@@ -123,12 +123,13 @@ class Good extends Service {
     const create = await ctx.model.Goods.create({
       goods:body.goods,
       price:body.price,
-      class_id:body.class_id,
-      main_id:body.main_id,
-      path_id:body.path_id,
-      detail_id:body.detail_id,
+      classId:body.class_id,
+      mainId:body.main_id,
+      pathId:body.path_id,
+      detailId:body.detail_id,
       total:body.total||9999,
       buy:body.buy||0,
+      recommend:body.recommend
     })
     return {
       status:200,

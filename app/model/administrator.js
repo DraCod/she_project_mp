@@ -2,7 +2,7 @@
 
 module.exports = app => {
   const { STRING, INTEGER, DATE } = app.Sequelize;
-  const Administrator = app.model.define('administrators', {
+  return app.model.define('administrators', {
     id: {
       primaryKey: true,
       type: INTEGER,
@@ -15,5 +15,4 @@ module.exports = app => {
     createdAt: DATE,
     updatedAt: DATE,
   });
-  return Administrator;
 };

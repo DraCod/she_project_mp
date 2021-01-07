@@ -1,34 +1,32 @@
 'use strict';
-
 const Controller = require('egg').Controller;
-
 
 class AdministratorLoginController extends Controller {
   /**
    * 后台登录接口
    * @param account 账号
    * @param password 密码
-   * @returns {Promise<void>}
+   * @return {Promise<void>}
    */
   async login() {
     const { ctx } = this;
     const body = ctx.request.body;
-    const  verify = this.app.verify([
+    const verify = this.app.verify([
       {
-        label:'username',
+        label: 'username',
         value: body.username,
       },
       {
-        label:'password',
+        label: 'password',
         value: body.password,
       },
     ]);
-    if(verify){
+    if (verify) {
       ctx.body = {
-        status:402,
-        msg:verify,
+        status: 402,
+        msg: verify,
       };
-      return ;
+      return;
     }
     ctx.body = await this.ctx.service.login.administrator.login(body);
   }

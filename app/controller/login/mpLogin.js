@@ -35,11 +35,6 @@ class LoginController extends Controller {
       encryptedData: body.encryptedData,
       iv: body.iv,
     });
-    // ctx.app.jwt.sign({
-    //   ...ctx.request.body,
-    // }, this.app.config.jwt.secret, {
-    //   expiresIn: '60s',
-    // });
   }
 
 
@@ -67,12 +62,6 @@ class LoginController extends Controller {
     } catch (err) {
       throw new Error('Illegal Buffer');
     }
-    // console.log(await this.ctx.service.login.Login(decoded));
-    // console.log(111111111);
-    // this.ctx.body = {
-    //   msg: '请重新再试',
-    //   status: -1,
-    // };
     console.log(decoded, 'decoded');
     const data = await this.ctx.service.login.mpLogin.Login(decoded);
     this.ctx.body = {
@@ -82,43 +71,6 @@ class LoginController extends Controller {
         expiresIn: '6000000s',
       }),
     };
-  }
-
-  /**
-   * 获取微信token
-   */
-  async getAccessToken() {
-    const config = this.ctx.app.config;
-    if (config.token) {
-      return config.token;
-    }
-    const data = {
-      grant_type: 'client_credential',
-      appid: config.AppID,
-      secret: config.AppSecret,
-    };
-    const res = await this.ctx.curl('https://api.weixin.qq.com/cgi-bin/token', {
-      method: 'GET',
-      dataType: 'json',
-      data,
-    });
-    let return_data = '';
-    if (res.status === 200 && res.data.access_token) {
-      config.token = res.data.access_token;
-      config.expires_in = res.data.expires_in;
-      time = setInterval(() => {
-        if (config.expires_in <= 0) {
-          clearInterval(time);
-          config.expires_in = '';
-          config.token = '';
-        }
-        config.expires_in--;
-      });
-      return_data = config.token;
-    } else {
-      return_data = '请求失败';
-    }
-    return return_data;
   }
 
 
@@ -159,6 +111,44 @@ class LoginController extends Controller {
     const {id} = this.app.getUserId(this.ctx);
     this.ctx.body = await this.ctx.service.login.mpLogin.getWallet(id);
   }
+
+  /**
+   * 获取微信token
+   */
+  async getAccessToken() {
+    const config = this.ctx.app.config;
+    if (config.token) {
+      return config.token;
+    }
+    const data = {
+      grant_type: 'client_credential',
+      appid: config.AppID,
+      secret: config.AppSecret,
+    };
+    const res = await this.ctx.curl('https://api.weixin.qq.com/cgi-bin/token', {
+      method: 'GET',
+      dataType: 'json',
+      data,
+    });
+    let return_data = '';
+    if (res.status === 200 && res.data.access_token) {
+      config.token = res.data.access_token;
+      config.expires_in = res.data.expires_in;
+      time = setInterval(() => {
+        if (config.expires_in <= 0) {
+          clearInterval(time);
+          config.expires_in = '';
+          config.token = '';
+        }
+        config.expires_in--;
+      });
+      return_data = config.token;
+    } else {
+      return_data = '请求失败';
+    }
+    return return_data;
+  }
+
 }
 
 module.exports = LoginController;

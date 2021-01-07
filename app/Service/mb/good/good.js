@@ -8,7 +8,7 @@ class Good extends Service{
     let list = await this.ctx.model.Goods.findAll({
       where:{
         goods:{
-          [Sequelize.Op.like]:`%${query.search}`
+          [Sequelize.Op.like]:`%${query.search}%`
         }
       },
       order:[
