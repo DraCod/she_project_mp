@@ -191,6 +191,7 @@ class Good extends Controller{
         status:402,
         msg:'商品id不能为空'
       }
+      return
     }
     const {id} = this.app.getUserId(ctx);
     ctx.query.userid = id;

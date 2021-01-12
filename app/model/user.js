@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = app => {
-  const { STRING, INTEGER, DATE ,FLOAT } = app.Sequelize;
+  const { STRING, INTEGER, DATE ,DOUBLE } = app.Sequelize;
   const User = app.model.define('users', {
     id: {
       primaryKey: true,
@@ -13,8 +13,8 @@ module.exports = app => {
     avatarUrl:STRING,
     password:STRING,
     openId: STRING,
-    giveWallet:FLOAT,
-    rechargeWallet:FLOAT,
+    giveWallet:DOUBLE,
+    rechargeWallet:DOUBLE,
     createdAt: DATE,
     updatedAt: DATE,
   });
